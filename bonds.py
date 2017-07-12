@@ -42,19 +42,19 @@ def computeBondLevelData(bond):
                     interestPayment = bond.couponPercent * bond.nominal / 12
 
                 elif bond.couponPeriod == "Quarterly":
-                    if month in [3,6,9,12]:
+                    if month in [3,6,9,12] or cashFlowDate == bond.endDate:
                         interestPayment = bond.couponPercent * bond.nominal / 4
                     else:
                         interestPayment = 0
 
                 elif bond.couponPeriod == "Semi-Annual":
-                    if month in [6,12]:
+                    if month in [6,12] or cashFlowDate == bond.endDate:
                         interestPayment = bond.couponPercent * bond.nominal / 2
                     else:
                         interestPayment = 0
 
                 elif bond.couponPeriod == "Annual":
-                    if month == 12:
+                    if month == 12 or cashFlowDate == bond.endDate:
                         interestPayment = bond.couponPercent * bond.nominal / 1
                     else:
                         interestPayment = 0
