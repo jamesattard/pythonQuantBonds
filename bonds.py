@@ -64,6 +64,7 @@ def computeBondLevelData(bond):
     return bondLevelData # Return an array of dictionaries each containing a cashflow entry per month
 
 def computePortfolioLevelData(bondLevelData):
+    portfolioLevelData = []
     bucketOne = [0, datetime.datetime.strptime("31/01/2017", "%d/%m/%Y").date()]
     bucketTwo = [0, datetime.datetime.strptime("31/03/2017", "%d/%m/%Y").date()]
     bucketThree = [0, datetime.datetime.strptime("31/12/2017", "%d/%m/%Y").date()]
@@ -73,28 +74,38 @@ def computePortfolioLevelData(bondLevelData):
     bucketSeven = [0, datetime.datetime.strptime("31/12/2025", "%d/%m/%Y").date()]
     bucketEight = [0, datetime.datetime.strptime("31/12/2025", "%d/%m/%Y").date()]
 
+    buckets=[\
+    [0, datetime.datetime.strptime("31/01/2017", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/03/2017", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/12/2017", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/12/2019", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/12/2021", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/12/2023", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/12/2025", "%d/%m/%Y").date()],\
+    [0, datetime.datetime.strptime("31/12/2025", "%d/%m/%Y").date()]\
+    ]
+
     for bondEntry in bondLevelData:
         if bondEntry['cashFlowDate'] <= bucketOne[1]:
-            bucketOne[0] += bondEntry['total']
+            buckets[0][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketOne[1] and bondEntry['cashFlowDate'] <= bucketTwo[1]:
-            bucketTwo[0] += bondEntry['total']
+            buckets[1][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketTwo[1] and bondEntry['cashFlowDate'] <= bucketThree[1]:
-            bucketThree[0] += bondEntry['total']
+            buckets[2][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketThree[1] and bondEntry['cashFlowDate'] <= bucketFour[1]:
-            bucketFour[0] += bondEntry['total']
+            buckets[3][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketFour[1] and bondEntry['cashFlowDate'] <= bucketFive[1]:
-            bucketFive[0] += bondEntry['total']
+            buckets[4][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketFive[1] and bondEntry['cashFlowDate'] <= bucketSix[1]:
-            bucketSix[0] += bondEntry['total']
+            buckets[5][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketSix[1] and bondEntry['cashFlowDate'] <= bucketSeven[1]:
-            bucketSeven[0] += bondEntry['total']
+            buckets[6][0] += bondEntry['total']
         elif bondEntry['cashFlowDate'] > bucketSeven[1]:
-            bucketEight[0] += bondEntry['total']
+            buckets[7][0] += bondEntry['total']
 
-    print format(bucketOne[0], '.2f'), format(bucketTwo[0], '.2f'), format(bucketThree[0], '.2f'), format(bucketEight[0], '.2f')
+    for bucket in buckets:
+        portfolioLevelData.append(bucket[0])
 
-    bondEntry = ""
-    portfolioLevelData = bondEntry
     return portfolioLevelData
 
 def main():
@@ -103,8 +114,7 @@ def main():
     bond3 = createBond("FXD_BOND_3", 30000000, "30/06/16", "30/06/20", 0.03, "Semi-Annual")
     bond4 = createBond("FXD_BOND_4", 40000000, "30/09/16", "30/09/26", 0.04, "Annual")
 
-    #for bond in [bond1, bond2, bond3, bond4]:
-    for bond in [bond1]:
+    for bond in [bond1, bond2, bond3, bond4]:
         print ""
         print "Bond Level Data computation for " + bond.name + ":"
         print "-------------------------------------------"
@@ -113,9 +123,12 @@ def main():
         for bondEntry in bondLevelData:
             print bondEntry['row'], ",", bondEntry['bondName'], ",", bondEntry['cashFlowDate'], ",", bondEntry['interestPayment'], ",", bondEntry['principalPayment']
 
-        portfolioLevelData = computePortfolioLevelData(bondLevelData)
         print ""
-        print portfolioLevelData
+        print "Portfolio Level Data computation for " + bond.name + ":"
+        print "-------------------------------------------"
+        print "Bond Name", "+", "<= 1m , " + ">1m <=3m , " + ">3m <=1y , " + ">1y <= 2y , " + ">2y <=3y ," + ">3y <=4y, " + ">4y <= 5y, " + "Remaining"
+        portfolioLevelData = computePortfolioLevelData(bondLevelData)
+        print bondEntry['bondName'], portfolioLevelData[0], "," , portfolioLevelData[1], "," ,portfolioLevelData[2], "," ,portfolioLevelData[3], "," ,portfolioLevelData[4], "," ,portfolioLevelData[5], "," ,portfolioLevelData[6], "," ,portfolioLevelData[7]
 
 if __name__ == "__main__":
     main()
