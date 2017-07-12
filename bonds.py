@@ -60,14 +60,20 @@ def computeBondLevelData(bond):
 
     return bondLevelData
 
-bond1 = createBond("FXD_BOND_1", 10000000, "31/12/16", "31/12/17", 0.01, "Monthly")
-bond2 = createBond("FXD_BOND_2", 20000000, "31/03/16", "31/03/20", 0.03, "Quarterly")
-bond3 = createBond("FXD_BOND_3", 30000000, "30/06/16", "30/06/20", 0.03, "Semi-Annual")
-bond4 = createBond("FXD_BOND_4", 40000000, "30/09/16", "30/09/26", 0.04, "Annual")
+def main():
+    bond1 = createBond("FXD_BOND_1", 10000000, "31/12/16", "31/12/17", 0.01, "Monthly")
+    bond2 = createBond("FXD_BOND_2", 20000000, "31/03/16", "31/03/20", 0.03, "Quarterly")
+    bond3 = createBond("FXD_BOND_3", 30000000, "30/06/16", "30/06/20", 0.03, "Semi-Annual")
+    bond4 = createBond("FXD_BOND_4", 40000000, "30/09/16", "30/09/26", 0.04, "Annual")
 
-print "Bond Level Data computation..."
-print "Row , " + "Bond Name , " + "Cash Flow Date , " + "Interest Payment , " + "Principal Payment"
-for bond in [bond1, bond2, bond3, bond4]:
-    bondLevelData = computeBondLevelData(bond)
-    for bondEntry in bondLevelData:
-        print bondEntry['row'], ",", bondEntry['bondName'], ",", bondEntry['cashFlowDate'], ",", bondEntry['interestPayment'], ",", bondEntry['principalPayment']
+    for bond in [bond1, bond2, bond3, bond4]:
+        print ""
+        print "Bond Level Data computation for " + bond.name + ":"
+        print "-------------------------------------------"
+        print "Row , " + "Bond Name , " + "Cash Flow Date , " + "Interest Payment , " + "Principal Payment"
+        bondLevelData = computeBondLevelData(bond)
+        for bondEntry in bondLevelData:
+            print bondEntry['row'], ",", bondEntry['bondName'], ",", bondEntry['cashFlowDate'], ",", bondEntry['interestPayment'], ",", bondEntry['principalPayment']
+
+if __name__ == "__main__":
+    main()
